@@ -1,4 +1,4 @@
-package it.lueneberg.rsp
+package it.lueneberg.rps
 
 enum class Result {
     WIN, DRAW, LOSE
