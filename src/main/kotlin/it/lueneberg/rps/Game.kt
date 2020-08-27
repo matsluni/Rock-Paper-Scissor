@@ -1,5 +1,7 @@
 package it.lueneberg.rps
 
+import java.io.PrintStream
+
 class Game {
     private val p1: Player
     private val p2: Player
@@ -34,5 +36,23 @@ data class GameResult(val p1Wins: Int, val p1Loses: Int, val p1Draws: Int) {
 
     companion object {
         val empty = GameResult(0, 0, 0)
+    }
+
+    fun print(printStream: PrintStream = System.out): Unit {
+        printStream.println(
+            """
+            Game result
+            ###########
+            
+            Player 1 Wins : $p1Wins
+            Player 1 Draws: $p1Draws
+            Player 1 Loses: $p1Loses
+    
+            Player 2 Wins : $p2Wins
+            Player 2 Draws: $p2Draws
+            Player 2 Loses: $p2Loses
+            """.trimIndent()
+        )
+
     }
 }

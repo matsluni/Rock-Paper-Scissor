@@ -10,3 +10,7 @@ in Kotlin.
 ## Run the tests
 
     ./gradlew kotest
+    
+## Run the main class
+
+    ./gradlew run
