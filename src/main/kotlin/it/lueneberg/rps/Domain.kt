@@ -7,8 +7,8 @@ enum class Result {
 enum class Action {
     ROCK, PAPER, SCISSOR;
 
-    fun evaluate(other: Action): Result {
-        return when (this) {
+    fun evaluate(other: Action): Result =
+        when (this) {
             ROCK -> when (other) {
                 ROCK -> Result.DRAW
                 PAPER -> Result.LOSE
@@ -25,5 +25,9 @@ enum class Action {
                 SCISSOR -> Result.DRAW
             }
         }
-    }
+
+}
+
+class Player(private val actionGenerator: ActionGenerator) {
+    fun nextAction(): Action = actionGenerator.action()
 }
