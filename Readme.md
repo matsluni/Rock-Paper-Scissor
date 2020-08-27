@@ -6,3 +6,7 @@ in Kotlin.
 ## Build the code
 
     ./gradlew cK
+    
+## Run the tests
+
+    ./gradlew kotest
