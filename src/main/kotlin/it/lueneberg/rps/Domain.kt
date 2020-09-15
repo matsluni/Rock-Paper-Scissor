@@ -5,26 +5,25 @@ enum class Result {
 }
 
 enum class Action {
-    ROCK, PAPER, SCISSOR;
+    ROCK, PAPER, SCISSOR, LIZARD, SPOCK;
 
     fun evaluate(other: Action): Result =
-        when (this) {
-            ROCK -> when (other) {
-                ROCK -> Result.DRAW
-                PAPER -> Result.LOSE
-                SCISSOR -> Result.WIN
-            }
-            PAPER -> when (other) {
-                ROCK -> Result.WIN
-                PAPER -> Result.DRAW
-                SCISSOR -> Result.LOSE
-            }
-            SCISSOR -> when (other) {
-                ROCK -> Result.LOSE
-                PAPER -> Result.WIN
-                SCISSOR -> Result.DRAW
-            }
+        if (this == other) Result.DRAW
+        else {
+            if (winsAgainst[this]?.contains(other)!!) Result.WIN
+            else Result.LOSE
         }
+
+
+    val winsAgainst by lazy {
+        mapOf(ROCK to setOf(SCISSOR, LIZARD),
+              PAPER to setOf(ROCK, SPOCK),
+              SCISSOR to setOf(PAPER, LIZARD),
+              LIZARD to setOf(SPOCK, PAPER),
+              SPOCK to setOf(SCISSOR, ROCK)
+            )
+    }
+
 
 }
 

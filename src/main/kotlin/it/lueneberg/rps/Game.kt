@@ -15,12 +15,10 @@ class Game {
     }
 
     fun play(): GameResult =
-        (1..iterations)
-            .toList()
-            .fold(GameResult.empty) { agg, g ->
-                val p1Action = p1.nextAction()
-                val p2Action = p2.nextAction()
-                when (p1Action.evaluate(p2Action)) {
+        generateSequence { p1.nextAction() to p2.nextAction() }
+            .take(iterations)
+            .fold(GameResult.empty) { agg, (actionOne, actionTwo) ->
+                when (actionOne.evaluate(actionTwo)) {
                     Result.WIN -> agg.copy(p1Wins = agg.p1Wins + 1)
                     Result.DRAW -> agg.copy(p1Draws = agg.p1Draws + 1)
                     Result.LOSE -> agg.copy(p1Loses = agg.p1Loses + 1)

@@ -1,7 +1,7 @@
 package it.lueneberg.rps
 
 import io.kotest.core.spec.style.StringSpec
-import io.kotest.matchers.*
+import io.kotest.matchers.shouldBe
 import it.lueneberg.rps.Action.*
 import it.lueneberg.rps.Result.*
 
@@ -40,5 +40,17 @@ class DomainTest : StringSpec({
 
     "Rock plays draw against itself" {
         ROCK.evaluate(ROCK) shouldBe DRAW
+    }
+
+    "Rock beats Lizard" {
+        ROCK.evaluate(LIZARD) shouldBe WIN
+    }
+
+    "Lizard beats Paper" {
+        LIZARD.evaluate(PAPER) shouldBe WIN
+    }
+
+    "Spock beats Rock" {
+        SPOCK.evaluate(ROCK) shouldBe WIN
     }
 })
