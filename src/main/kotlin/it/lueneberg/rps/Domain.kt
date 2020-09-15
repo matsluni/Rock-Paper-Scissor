@@ -5,28 +5,37 @@ enum class Result {
 }
 
 enum class Action {
-    ROCK, PAPER, SCISSOR, LIZARD, SPOCK;
+
+    ROCK {
+        override val beats by lazy {setOf(SCISSOR, LIZARD)}
+    },
+
+    PAPER {
+        override val beats by lazy {setOf(ROCK, SPOCK)}
+    },
+
+    SCISSOR {
+        override val beats by lazy {setOf(PAPER, LIZARD)}
+    },
+
+    LIZARD {
+        override val beats by lazy {setOf(SPOCK, PAPER)}
+    },
+
+    SPOCK {
+        override val beats by lazy {setOf(SCISSOR, ROCK)}
+    };
+
+    abstract val beats: Set<Action>
 
     fun evaluate(other: Action): Result =
         if (this == other) Result.DRAW
         else {
-            if (winsAgainst[this]?.contains(other)!!) Result.WIN
+            if (beats.contains(other)) Result.WIN
             else Result.LOSE
         }
-
-
-    val winsAgainst by lazy {
-        mapOf(ROCK to setOf(SCISSOR, LIZARD),
-              PAPER to setOf(ROCK, SPOCK),
-              SCISSOR to setOf(PAPER, LIZARD),
-              LIZARD to setOf(SPOCK, PAPER),
-              SPOCK to setOf(SCISSOR, ROCK)
-            )
-    }
-
-
 }
 
-class Player(private val actionGenerator: ActionGenerator) {
-    fun nextAction(): Action = actionGenerator.action()
+class Player(private val f: () -> Action) {
+    fun nextAction(): Action = generateSequence { f() }.take(1).last()
 }

@@ -9,30 +9,30 @@ import java.nio.charset.StandardCharsets
 
 class GameTest : StringSpec({
     "Game cannot be create with less than 100 iterations" {
-        val p1 = Player(ActionGenerator.const(Action.PAPER))
-        val p2 = Player(ActionGenerator.const(Action.PAPER))
+        val p1 = Player{Action.PAPER}
+        val p2 = Player{Action.PAPER}
         shouldThrow<IllegalArgumentException> {
             Game(p1, p2, 99)
         }
     }
 
     "GameResult should have 100 wins for player 1" {
-        val p1 = Player(ActionGenerator.const(Action.PAPER))
-        val p2 = Player(ActionGenerator.const(Action.ROCK))
+        val p1 = Player{Action.PAPER}
+        val p2 = Player{Action.ROCK}
         val result = Game(p1, p2, 100).play()
         result.p1Wins shouldBe 100
     }
 
     "GameResult should have 100 wins for player 2" {
-        val p1 = Player(ActionGenerator.const(Action.ROCK))
-        val p2 = Player(ActionGenerator.const(Action.PAPER))
+        val p1 = Player{Action.ROCK}
+        val p2 = Player{Action.PAPER}
         val result = Game(p1, p2, 100).play()
         result.p2Wins shouldBe 100
     }
 
     "GameResult should have 100 draws for player 1 and player 2" {
-        val p1 = Player(ActionGenerator.const(Action.ROCK))
-        val p2 = Player(ActionGenerator.const(Action.ROCK))
+        val p1 = Player{Action.ROCK}
+        val p2 = Player{Action.ROCK}
         val result = Game(p1, p2, 100).play()
         result.p1Draws shouldBe 100
         result.p2Draws shouldBe 100

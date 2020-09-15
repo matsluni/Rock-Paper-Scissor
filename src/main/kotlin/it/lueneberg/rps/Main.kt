@@ -1,10 +1,10 @@
 @file:JvmName("Main")
 package it.lueneberg.rps
 
+import kotlin.random.Random
+
 fun main() {
-    val rockAction = ActionGenerator.const(Action.ROCK)
-    val rndAction = ActionGenerator.random()
-    val game = Game(Player(rndAction), Player(rockAction), 100)
+    val game = Game(Player{Action.values()[Random.nextInt(Action.values().size)]}, Player{Action.ROCK}, 100)
     val gameResult = game.play()
     gameResult.print()
 }
