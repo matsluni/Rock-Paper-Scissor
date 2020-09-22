@@ -34,6 +34,9 @@ enum class Action {
             if (beats.contains(other)) Result.WIN
             else Result.LOSE
         }
+
+    fun evaluateToGameResult(other: Action): GameResult =
+        GameResult.fromResult(evaluate(other))
 }
 
 class Player(private val f: () -> Action) {

@@ -1,6 +1,10 @@
 package it.lueneberg.rps
 
 import java.io.PrintStream
+import arrow.*
+import arrow.core.extensions.*
+import arrow.core.extensions.sequence.foldable.foldLeft
+import arrow.typeclasses.*
 
 class Game {
     private val p1: Player
@@ -17,11 +21,9 @@ class Game {
     fun play(): GameResult =
         generateSequence { p1.nextAction() to p2.nextAction() }
             .take(iterations)
-            .fold(GameResult.empty) { agg, (actionOne, actionTwo) ->
-                when (actionOne.evaluate(actionTwo)) {
-                    Result.WIN -> agg.copy(p1Wins = agg.p1Wins + 1)
-                    Result.DRAW -> agg.copy(p1Draws = agg.p1Draws + 1)
-                    Result.LOSE -> agg.copy(p1Loses = agg.p1Loses + 1)
+            .foldLeft(GameResult.GameResultMonoid.empty()) { agg, (a1, a2) ->
+                GameResult.GameResultMonoid.run {
+                    agg.combine(a1.evaluateToGameResult(a2))
                 }
             }
 
@@ -33,7 +35,24 @@ data class GameResult(val p1Wins: Int, val p1Loses: Int, val p1Draws: Int) {
     val p2Loses = p1Wins
 
     companion object {
+        fun fromResult(res: Result): GameResult =
+            when (res) {
+                Result.WIN -> GameResult(1, 0, 0 )
+                Result.LOSE -> GameResult(0, 1, 0 )
+                Result.DRAW -> GameResult(0, 0, 1 )
+            }
+
         val empty = GameResult(0, 0, 0)
+        val GameResultMonoid = object : Monoid<GameResult> {
+            override fun empty(): GameResult = empty
+            override fun GameResult.combine(b: GameResult): GameResult =
+                this.copy(
+                    p1Wins = this.p1Wins + b.p1Wins,
+                    p1Loses = this.p1Loses + b.p1Loses,
+                    p1Draws = this.p1Draws + b.p1Draws
+                )
+
+        }
     }
 
     fun print(printStream: PrintStream = System.out): Unit {
